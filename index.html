@@ -9,6 +9,12 @@
   <body>
     <canvas id="canvas"></canvas>
     <script>
+      function drawline(x1, y1, x2, y2) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
       //获取屏幕宽高
       let canvas = document.getElementById("canvas");
       let documentWidth = document.documentElement.clientWidth;
@@ -19,28 +25,50 @@
       //canvas画线
 
       let ctx = canvas.getContext("2d");
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
 
       let painting = false;
-      canvas.onmousedown = () => {
-        painting = true;
-      };
+      let isTouchDevice = "ontouchstart" in document.documentElement;
+      console.log(isTouchDevice);
 
-      ctx.fillStyle = "black";
-      ctx.strokeStyle = "none";
+      let last;
+      //触屏设备
+      if (isTouchDevice) {
+        canvas.ontouchstart = (e) => {
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          last = [x, y];
+        };
+        canvas.ontouchmove = (e) => {
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          drawline(last[0], last[1], x, y);
+          //把当前这一次当成上一次
+          last = [x, y];
+        };
+        //鼠标
+      } else {
+        canvas.onmousedown = (e) => {
+          painting = true;
+          //鼠标按下的时候把这个点当作上次的点
+          last = [e.clientX, e.clientY];
+          console.log(last);
+        };
 
-      canvas.onmousemove = (e) => {
-        if (painting === true) {
-          ctx.beginPath();
-          ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
-          ctx.stroke();
-          ctx.fill();
-        } else {
-          console.log("什么都不做");
-        }
-      };
-      canvas.onmouseup = () => {
-        painting = false;
-      };
+        canvas.onmousemove = (e) => {
+          if (painting === true) {
+            drawline(last[0], last[1], e.clientX, e.clientY);
+            //把当前这一次当成上一次
+            last = [e.clientX, e.clientY];
+          }
+        };
+        canvas.onmouseup = () => {
+          painting = false;
+        };
+      }
     </script>
   </body>
 </html>
