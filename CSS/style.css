@@ -7,6 +7,9 @@
 #canvas {
     display: block;
 }
+body{
+    cursor: url("../erasericon.cur"),auto;
+}
 
 .b10 {
     border: 1px solid red;
@@ -18,16 +21,49 @@
 }
 
 .pencontainer {
+    background-color: #f6f6f6;
     display: flex;
-flex-wrap: nowrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
+    max-height: 40px;
+    width: 100%;
+}
+.colorscontainer{
+    background-color: #ececec;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    width: 60%;
 }
 
 .pens {
-    height: 50px;
-    width: 50px;
+    width: 10%;
+    max-height: 50px;
+    margin-right: 5px;
 }
 .eraser{
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 10%;
+}
+
+.colors{
+    min-height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.text{
+    color: white;
+    font-weight: bold;
+}
+
+.icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
 }

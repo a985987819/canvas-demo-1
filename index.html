@@ -15,7 +15,15 @@
     <img src="./img/pen1.png" alt="" class="pens" onclick="pensize(5)">
     <img src="./img/pen2.png" alt="" class="pens" onclick="pensize(25)">
     <img src="./img/pen3.png" alt="" class="pens" onclick="pensize(50)">
+    <div class="colorscontainer">
+        <div class="colors" style="background-color: #ffe192"></div>
+        <div class="colors" style="background-color: #91ff91"></div>
+        <span class="text">颜色</span>
+        <div class="colors" style="background-color: #ff8181"></div>
+        <div class="colors" style="background-color: #98dcff"></div>
+    </div>
     <img src="./img/eraser.png" alt="" class="eraser" onclick="eraser()">
+
 </div>
 
 <div>
@@ -26,18 +34,59 @@
 
 <script>
 
+    //at.alicdn.com/t/font_2098449_vjdyl6151z8.js
+    //RGB色值转换为16进制
+    String.prototype.colorHex = function () {
+        // RGB颜色值的正则
+        var reg = /^(rgb|RGB)/;
+        var color = this;
+        if (reg.test(color)) {
+            var strHex = "#";
+            // 把RGB的3个数值变成数组
+            var colorArr = color.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
+            // 转成16进制
+            for (var i = 0; i < colorArr.length; i++) {
+                var hex = Number(colorArr[i]).toString(16);
+                if (hex === "0") {
+                    hex += hex;
+                }
+                strHex += hex;
+            }
+            return strHex;
+        } else {
+            return String(color);
+        }
+    };
 
     function drawline(x1, y1, x2, y2) {
         ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
+        ctx.moveTo(x1, y1 - 40);
+        ctx.lineTo(x2, y2 - 40);
         ctx.stroke();
     }
+
+    // let colorfather = document.getElementsByClassName("colorscontainer")
+    let colorfather = document.querySelector(".colorscontainer")
+    console.log("这是colorfather元素------")
+    console.log(colorfather)
+
+    colorfather.addEventListener('click', function (e) {
+        if (e.target.tagName === 'DIV') {
+            console.log(e.target)
+            console.log(e.target.style)
+            console.log(e.target.style.backgroundColor)
+            let colorMa = e.target.style.backgroundColor.colorHex()
+            console.log(colorMa)
+            setcolor(colorMa)
+        }
+    })
+    document.body.style.cursor = "url(./img/erasericon.cur)12 12, auto";
+
 
     //获取屏幕宽高
     let canvas = document.getElementById("canvas");
     let documentWidth = document.documentElement.clientWidth;
-    let documentHeight = document.documentElement.clientHeight;
+    let documentHeight = document.documentElement.clientHeight - 50;
     canvas.width = documentWidth;
     canvas.height = documentHeight;
 
@@ -50,13 +99,28 @@
     ctx.lineCap = "round";
 
     function pensize(size) {
+        let color = ctx.strokeStyle
+        console.log(color)
         ctx.lineWidth = size
-        console.log("进来了，现在的size是"+ctx.lineWidth)
+        if (color === "#ffffff") {
+            console.log("现在的画笔颜色为" + color)
+            ctx.strokeStyle = "black"
+            console.log("现在的画笔颜色为" + color)
+        }
+        console.log("进来了，现在的size是" + ctx.lineWidth)
     }
-    function eraser(){
+
+    function eraser() {
         ctx.strokeStyle = "white"
         ctx.lineWidth = 50
-        console.log("进来了，现在的fillStyle是"+ctx.strokeStyle)
+        document.body.style.cursor = "url(erasericon.cur)12 12, auto";
+        console.log(document.body.style.cursor)
+        console.log("进来了，现在的fillStyle是" + ctx.strokeStyle)
+    }
+
+    function setcolor(color) {
+        ctx.strokeStyle = color
+        console.log("我进来了，现在的的颜色是" + ctx.strokeStyle)
     }
 
     let painting = false;
@@ -86,7 +150,6 @@
             last = [e.clientX, e.clientY];
             console.log(last);
         };
-
         canvas.onmousemove = (e) => {
             if (painting === true) {
                 drawline(last[0], last[1], e.clientX, e.clientY);
