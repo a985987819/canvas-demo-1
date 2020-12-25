@@ -1,8 +1,33 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
 #canvas {
-  display: block;
+    display: block;
+}
+
+.b10 {
+    border: 1px solid red;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.pencontainer {
+    display: flex;
+flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.pens {
+    height: 50px;
+    width: 50px;
+}
+.eraser{
+    height: 50px;
+    width: 50px;
 }
